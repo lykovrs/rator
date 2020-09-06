@@ -18,12 +18,12 @@ import dayjs from "dayjs";
 import { useRateStyles } from "./styles.js";
 
 import {
+  fetchRateByDate,
+  selectCurrentDate,
+  selectRateHistory,
   selectRatePolling,
   startPolling,
   stopPolling,
-  selectCurrentDate,
-  selectRateHistory,
-  fetchRateByDate,
 } from "./rateSlice";
 
 import { defaultPollingTime } from "../../constants";

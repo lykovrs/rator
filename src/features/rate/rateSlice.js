@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
-import { dateTemplate, apiURL, defaultDateAmount } from "../../constants";
+import { apiURL, dateTemplate, defaultDateAmount } from "../../constants";
 
 // Thunk
 export const fetchRateByDate = createAsyncThunk(
