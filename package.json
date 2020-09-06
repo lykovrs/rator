@@ -1,5 +1,6 @@
 {
   "name": "exchangerates",
+  "homepage": "https://lykovrs.github.io/rator/",
   "version": "0.1.0",
   "private": true,
   "lint-staged": {
