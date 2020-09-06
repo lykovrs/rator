@@ -1,19 +1,31 @@
 import React from "react";
 import { Chart } from "react-charts";
 import produce from "immer";
+import fx from "money";
 
-function MyRateChart({ items = [] }) {
+/**
+ * Компонент линейного графика курса валют
+ * @param items элементы для построения
+ * @returns {JSX.Element}
+ * @constructor
+ */
+function RateChart({ items = [] }) {
   const data = React.useMemo(() => {
     return items.reduce(
       (prev, curr) => {
-        const {
-          date,
-          rates: { EUR, USD },
-        } = curr;
+        const { date, rates } = curr;
+
+        fx.rates = rates;
 
         return produce(prev, (draftState) => {
-          draftState[0].data.push([new Date(date), EUR]);
-          draftState[1].data.push([new Date(date), USD]);
+          draftState[0].data.push([
+            new Date(date),
+            fx.convert(1, { from: "EUR", to: "RUB" }),
+          ]);
+          draftState[1].data.push([
+            new Date(date),
+            fx.convert(1, { from: "USD", to: "RUB" }),
+          ]);
         });
       },
       [
@@ -38,12 +50,11 @@ function MyRateChart({ items = [] }) {
   );
 
   return (
-    // A react-chart hyper-responsively and continuously fills the available
-    // space of its parent element automatically
     <div
       style={{
-        width: "400px",
-        height: "300px",
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
       }}
     >
       <Chart data={data} axes={axes} tooltip />
@@ -51,4 +62,4 @@ function MyRateChart({ items = [] }) {
   );
 }
 
-export default MyRateChart;
+export default RateChart;

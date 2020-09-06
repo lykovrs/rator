@@ -77,6 +77,6 @@ export const useRateStyles = makeStyles((theme) => ({
     flexDirection: "column",
   },
   fixedHeight: {
-    height: 240,
+    height: 400,
   },
 }));

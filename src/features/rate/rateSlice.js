@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
+import { dateTemplate, apiURL, defaultDateAmount } from "../../constants";
 
 // Thunk
 export const fetchRateByDate = createAsyncThunk(
   "rate/fetchRateByDate",
   async (date) => {
     const result = await fetch(
-      `https://api.exchangeratesapi.io/${date}?base=RUB&symbols=USD,EUR,RUB`
+      `${apiURL}/${date}?base=RUB&symbols=USD,EUR,RUB`
     );
 
     return await result.json();
@@ -16,13 +17,21 @@ export const fetchRateByDate = createAsyncThunk(
 export const rateSlice = createSlice({
   name: "rates",
   initialState: {
-    isActivePolling: false,
-    currentDate: dayjs().subtract(30, "day").format("YYYY-MM-DD"),
+    isActivePolling: true,
+    currentDate: dayjs()
+      .subtract(defaultDateAmount - 1, "day")
+      .format(dateTemplate),
     history: [],
   },
+  // Под капотом иммер, все имутабельно
   reducers: {
-    togglePolling: (state) => {
-      state.isActivePolling = !state.isActivePolling;
+    // Начинает поллинг
+    startPolling: (state) => {
+      state.isActivePolling = true;
+    },
+    // Останавливает поллинг
+    stopPolling: (state) => {
+      state.isActivePolling = false;
     },
   },
   extraReducers: {
@@ -32,7 +41,7 @@ export const rateSlice = createSlice({
     [fetchRateByDate.fulfilled]: (state, action) => {
       const nextDate = dayjs(state.currentDate)
         .add(1, "day")
-        .format("YYYY-MM-DD");
+        .format(dateTemplate);
       state.status = "succeeded";
       state.history = [
         ...state.history,
@@ -47,11 +56,8 @@ export const rateSlice = createSlice({
   },
 });
 
-export const { togglePolling } = rateSlice.actions;
+export const { startPolling, stopPolling } = rateSlice.actions;
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state) => state.counter.value)`
 export const selectCurrentDate = (state) => state.rate.currentDate;
 export const selectRateHistory = (state) => state.rate.history;
 export const selectRatePolling = (state) => state.rate.isActivePolling;
