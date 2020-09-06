@@ -33,6 +33,10 @@ export const rateSlice = createSlice({
     stopPolling: (state) => {
       state.isActivePolling = false;
     },
+    // Останавливает поллинг
+    togglePolling: (state) => {
+      state.isActivePolling = !state.isActivePolling;
+    },
   },
   extraReducers: {
     [fetchRateByDate.pending]: (state, action) => {
@@ -56,7 +60,7 @@ export const rateSlice = createSlice({
   },
 });
 
-export const { startPolling, stopPolling } = rateSlice.actions;
+export const { startPolling, stopPolling, togglePolling } = rateSlice.actions;
 
 export const selectCurrentDate = (state) => state.rate.currentDate;
 export const selectRateHistory = (state) => state.rate.history;

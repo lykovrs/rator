@@ -24,6 +24,7 @@ import {
   selectRatePolling,
   startPolling,
   stopPolling,
+  togglePolling,
 } from "./rateSlice";
 
 import { defaultPollingTime } from "../../constants";
@@ -95,7 +96,7 @@ export default function Rate() {
                 color="primary"
                 className={classes.button}
                 onClick={() => {
-                  dispatch(startPolling());
+                  dispatch(togglePolling());
                 }}
               >
                 {isActivePolling ? "Stop" : "Start"} polling
